@@ -10,7 +10,7 @@ import (
 	"math"
 	"os"
 
-	"github.com/richinsley/comfy2go/client"
+	"github.com/lllfx/comfy2go/client"
 	"github.com/schollz/progressbar/v3"
 )
 
