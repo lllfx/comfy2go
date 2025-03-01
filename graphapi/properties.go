@@ -477,6 +477,14 @@ type StringProperty struct {
 	Multiline bool
 }
 
+func isNil(i interface{}) bool {
+	if i == nil {
+		return true
+	}
+	v := reflect.ValueOf(i)
+	return v.Kind() == reflect.Ptr && v.IsNil()
+}
+
 func newStringProperty(input_name string, optional bool, data interface{}, index int) *Property {
 	c := &StringProperty{
 		BaseProperty: BaseProperty{name: input_name, optional: optional, serializable: true, index: index, target_value_index: -1},
@@ -487,13 +495,22 @@ func newStringProperty(input_name string, optional bool, data interface{}, index
 
 	if d, ok := data.(map[string]interface{}); ok {
 		// default?
+
 		if val, ok := d["default"]; ok {
-			c.Default = val.(string)
+			if isNil(val) {
+				c.Default = ""
+			} else {
+				c.Default = val.(string)
+			}
 		}
 
 		// multiline?
 		if val, ok := d["multiline"]; ok {
-			c.Multiline = val.(bool)
+			if isNil(val) {
+				c.Multiline = false
+			} else {
+				c.Multiline = val.(bool)
+			}
 		}
 	}
 
